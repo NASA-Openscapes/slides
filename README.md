@@ -19,6 +19,10 @@ Create your own with:
 
 https://openscapes.2i2c.cloud/user/USERNAME/proxy/LOCALHOST/
 
+Soon, this will auto-refresh but until then, manually refresh your browser tab to see your updates. Your terminal will say "watching for updates".
+
+If you need to stop your terminal, type `Control-C` or close your terminal. Then, you can re-run the command above if need be and update your url to preview slides.
+
 ## Making slides
 
 Here is an example: 
