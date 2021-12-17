@@ -357,7 +357,7 @@
 <h3 id="search-for-stac-items-read-in-a-geojson-file-and-plot">Search for STAC Items: Read in a geojson file and plot</h3>
 <p><font size="4"></font></p><font size="4">
 <p>We will define our ROI using a geojson file containing a small polygon feature in western Nebraska, USA. We’ll also specify the data collections and a time range for our example.</p>
-<p>Read in a geojson file with geopandas and extract coodinates for our ROI. We can plot the polygon using the <code>geoviews</code> package that we imported as <code>gv</code> with ‘bokeh’ and ‘matplotlib’ extensions. The following has reasonable width, height, color, and line widths to view our polygon when it is overlayed on a base tile map.</p>
+<p>Read in a geojson file with <code>geopandas</code> and extract coodinates for our ROI. We can plot the polygon using the <code>geoviews</code> package that we imported as <code>gv</code> with ‘bokeh’ and ‘matplotlib’ extensions. The following has reasonable width, height, color, and line widths to view our polygon when it is overlayed on a base tile map.</p>
 </font><p><font size="4"></font></p>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python cell-code number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>field <span class="op">=</span> geopandas.read_file(<span class="st">'data/ne_w_agfields.geojson'</span>)</span>
@@ -474,7 +474,7 @@
 
 <h3 id="filtering-stac-items">Filtering STAC Items</h3>
 <p><font size="4"></font></p><font size="4">
-<p>Below we will loop through and filter the item_collection by a specified cloud cover as well as extract the band we’d need to do an Enhanced Vegetation Index (EVI) calculation for a future analysis. We will also specify the STAC Assets (i.e., bands/layers) of interest for both the S30 and L30 collections (also in our collections variable above) and print out the first ten links, converted to s3 locations:</p>
+<p>Below we will loop through and filter the <code>item_collection</code> by a specified cloud cover as well as extract the band we’d need to do an Enhanced Vegetation Index (EVI) calculation for a future analysis. We will also specify the STAC Assets (i.e., bands/layers) of interest for both the S30 and L30 collections (also in our collections variable above) and print out the first ten links, converted to s3 locations:</p>
 </font><p><font size="4"></font></p>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python cell-code number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>cloudcover <span class="op">=</span> <span class="dv">25</span></span>
@@ -539,9 +539,12 @@
 <section class="slide level2">
 
 <h4 id="gdal-configurations">GDAL Configurations</h4>
-<p><font size="3"></font></p><font size="3">
+<p><font size="3.5"></font></p><font size="3.5">
 <p>GDAL is a foundational piece of geospatial software that is leveraged by several popular open-source, and closed, geospatial software. The rasterio package is no exception. Rasterio leverages GDAL to, among other things, read and write raster data files, e.g., GeoTIFFs/Cloud Optimized GeoTIFFs. To read remote files, i.e., files/objects stored in the cloud, GDAL uses its Virtual File System API. In a perfect world, one would be able to point a Virtual File System (there are several) at a remote data asset and have the asset retrieved, but that is not always the case. GDAL has a host of configurations/environmental variables that adjust its behavior to, for example, make a request more performant or to pass AWS credentials to the distribution system. Below, we’ll identify the evironmental variables that will help us get our data from cloud.</p>
-</font><p><font size="3"></font></p>
+</font><p><font size="3.5"></font></p>
+<p>
+<br>
+</p>
 <div class="cell" data-execution_count="9">
 <div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python cell-code number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>rio_env <span class="op">=</span> rio.Env(AWSSession(session),</span>
 <span id="cb11-2"><a href="#cb11-2"></a>                  GDAL_DISABLE_READDIR_ON_OPEN<span class="op">=</span><span class="st">'TRUE'</span>,</span>
@@ -580,7 +583,7 @@
 <h3 id="part-3-working-with-zarr-formatted-data">Part 3: Working with Zarr-formatted data</h3>
 <h4 id="using-nasas-harmony-cloud-transformation-service">using NASA’s Harmony cloud transformation service</h4>
 <p><font size="5"></font></p><font size="5">
-<p>We have already explored direct access to the NASA EOSDIS archive in the cloud via the Amazon Simple Storage Service (S3). In addition to directly accessing the files archived and distributed by each of the NASA DAACs, many datasets also support services that allow us to customize the data via subsetting, reformatting, reprojection, and other transformations.</p>
+<p>We have already explored direct access to the NASA EOSDIS archive in the cloud via the AWS S3. In addition to directly accessing the files archived and distributed by each of the NASA DAACs, many datasets also support services that allow us to customize the data via subsetting, reformatting, reprojection, and other transformations.</p>
 <p>This example demonstrates “analysis in place” using customized ECCO Level 4 monthly sea surface height data, in this case reformatted to Zarr, from a new ecosystem of services operating within the NASA Earthdata Cloud: <a href="https://harmony.earthdata.nasa.gov/">NASA Harmony</a>:</p>
 <ul>
 <li>Consistent access patterns to EOSDIS holdings make cross-data center data access easier</li>
@@ -594,7 +597,7 @@
 
 <h3 id="using-harmony-py-to-customize-data">Using Harmony-Py to customize data</h3>
 <p><font size="5"></font></p><font size="5">
-<p>Harmony-Py provides a pip installable Python alternative to directly using Harmony’s RESTful API to make it easier to request data and service options, especially when interacting within a Python Jupyter Notebook environment.</p>
+<p>Harmony-Py provides a pip installable Python alternative to directly using Harmony’s OGC Coverages API to make it easier to request data and service options, especially when interacting within a Python Jupyter Notebook environment.</p>
 </font><p><font size="5"></font></p>
 <h4 id="create-harmony-client-object">Create Harmony Client object</h4>
 <p><font size="5"></font></p><font size="5">
@@ -672,7 +675,7 @@
 <p><font size="5"></font></p><font size="5">
 <p>Open the Zarr stores using the s3fs package, then load them all at once into a concatenated xarray dataset:</p>
 </font><p><font size="5"></font></p>
-<div class="cell" data-execution_count="58">
+<div class="cell" data-execution_count="60">
 <div class="sourceCode" id="cb21"><pre class="sourceCode numberSource python cell-code number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>stores <span class="op">=</span> [s3fs.S3Map(root<span class="op">=</span>url, s3<span class="op">=</span>s3_fs, check<span class="op">=</span><span class="va">False</span>) <span class="cf">for</span> url <span class="kw">in</span> s3_urls]</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="kw">def</span> open_zarr_xarray(store):</span>
 <span id="cb21-3"><a href="#cb21-3"></a>    <span class="cf">return</span> xr.open_zarr(store<span class="op">=</span>store, consolidated<span class="op">=</span><span class="va">True</span>)</span>
@@ -680,8 +683,7 @@
 <span id="cb21-5"><a href="#cb21-5"></a>datasets <span class="op">=</span> pqdm(stores, open_zarr_xarray, n_jobs<span class="op">=</span><span class="dv">12</span>)</span>
 <span id="cb21-6"><a href="#cb21-6"></a></span>
 <span id="cb21-7"><a href="#cb21-7"></a>ds <span class="op">=</span> xr.concat(datasets, <span class="st">'time'</span>, coords<span class="op">=</span><span class="st">'minimal'</span>, )</span>
-<span id="cb21-8"><a href="#cb21-8"></a>ds <span class="op">=</span> xr.decode_cf(ds, mask_and_scale<span class="op">=</span><span class="va">True</span>, decode_coords<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb21-9"><a href="#cb21-9"></a>ds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-8"><a href="#cb21-8"></a>ds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img src="images/harmony-out.png" width="400px"></p>
 </section>
@@ -689,20 +691,15 @@
 
 <h3 id="plot-the-sea-surface-height-time-series-using-hvplot">Plot the Sea Surface Height time series using <code>hvplot</code></h3>
 <p><font size="4"></font></p><font size="4">
-<p>Now we can start looking at aggregations across the time dimension. In this case, plot the standard deviation of the temperature at each point to get a visual sense of how much temperatures fluctuate over the course of the month.</p>
+<p>Now we can start looking at aggregations across the time dimension. Here we plot the SSH variable using <code>hvplot</code> and can use the time slider to visualize changes in SSH over the year.</p>
 </font><p><font size="4"></font></p>
-<div class="cell" data-execution_count="52">
+<div class="cell" data-execution_count="61">
 <div class="sourceCode" id="cb22"><pre class="sourceCode numberSource python cell-code number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>ssh_da <span class="op">=</span> ds.SSH</span>
 <span id="cb22-2"><a href="#cb22-2"></a>ssh_da <span class="op">=</span> ssh_da.where(ssh_da <span class="op">&lt;</span> <span class="dv">9</span>) <span class="co">#apply land mask value</span></span>
-<span id="cb22-3"><a href="#cb22-3"></a></span>
-<span id="cb22-4"><a href="#cb22-4"></a>stdev_ssh <span class="op">=</span> ssh_da.std(<span class="st">'time'</span>)</span>
-<span id="cb22-5"><a href="#cb22-5"></a>stdev_ssh.name <span class="op">=</span> <span class="st">'stdev of analysed_sst [Kelvin]'</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a>stdev_ssh.plot()<span class="op">;</span></span>
-<span id="cb22-7"><a href="#cb22-7"></a></span>
-<span id="cb22-8"><a href="#cb22-8"></a>ssh_da.hvplot.image(x<span class="op">=</span><span class="st">'longitude'</span>, y<span class="op">=</span><span class="st">'latitude'</span>, cmap<span class="op">=</span><span class="st">'Spectral_r'</span>, aspect<span class="op">=</span><span class="st">'equal'</span>).opts(clim<span class="op">=</span>(ssh_da.attrs[<span class="st">'valid_min'</span>],ssh_da.attrs[<span class="st">'valid_max'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-3"><a href="#cb22-3"></a>ssh_da.hvplot.image(x<span class="op">=</span><span class="st">'longitude'</span>, y<span class="op">=</span><span class="st">'latitude'</span>, cmap<span class="op">=</span><span class="st">'Spectral_r'</span>, aspect<span class="op">=</span><span class="st">'equal'</span>).opts(clim<span class="op">=</span>(ssh_da.attrs[<span class="st">'valid_min'</span>],ssh_da.attrs[<span class="st">'valid_max'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <center>
-<img src="images/bokeh_plot_ECCO.png" width="700px">
+<img src="images/bokeh_plot_ECCO.png" width="750px">
 </center>
 </section>
 <section class="slide level2">
@@ -710,7 +707,7 @@
 <h3 id="data-and-analysis-co-located-in-place">Data and Analysis co-located “in place”</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/Cloud_ecosystem_diagram.png"></p>
+<p><img data-src="images/cloud_paradigm_DAACs.png"></p>
 <p></p><figcaption aria-hidden="true">Earthdata Cloud Paradigm</figcaption><p></p>
 </figure>
 </div>
